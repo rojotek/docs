@@ -3,7 +3,7 @@ author:
   name: Quintin Riis
   email: docs@linode.com
 description: Full Disk Encryption.
-keywords: full disk encryption debian wheezy security cryptsetup
+keywords: full disk encryption debian jessie security cryptsetup
 license: '[CC BY-ND 3.0](http://creativecommons.org/licenses/by-nd/3.0/us/)'
 modified: Thursday, June 19th, 2014
 modified_by:
@@ -12,7 +12,7 @@ published: 'Friday, July 5th, 2013'
 title: Full Disk Encryption
 ---
 
-Full disk encryption protects the information stored on your Linode's disks by converting it into unreadable code that can only be deciphered by authorized individuals. Nearly everything on the disk is encrypted, including the swap space and temporary files. This guide will help you implement full disk encryption on a Linode running Debian 7 (Wheezy). You'll learn how to:
+Full disk encryption protects the information stored on your Linode's disks by converting it into unreadable code that can only be deciphered by authorized individuals. Nearly everything on the disk is encrypted, including the swap space and temporary files. This guide will help you implement full disk encryption on a Linode running Debian 8 (Jessie). You'll learn how to:
 
 -   Format and encrypt your disks
 -   Install a base Debian 8 (Jessie) system with `debootstrap`
@@ -100,11 +100,11 @@ You have successfully enabled full disk encryption, created the file systems, an
 
 ### Installing Debian and Mounting the Disks
 
-Now it's time to install Debian 7 (Wheezy) and mount the disks. Here's how to do it:
+Now it's time to install Debian 8 (Jessie) and mount the disks. Here's how to do it:
 
 1.  Use `debootstrap` to install a minimal Debian installation by entering the following command:
 
-        debootstrap --arch=amd64  --include=openssh-server,vim,nano,cryptsetup wheezy mnt/
+        debootstrap --arch=amd64  --include=openssh-server,vim,nano,cryptsetup jessie mnt/
 
 2.  Mount `/dev/sda` and a few other things in preparation for changing root into the newly created Debian system, then changing root into the new install. Enter the following commands, one by one:
 
