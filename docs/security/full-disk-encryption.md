@@ -36,9 +36,9 @@ Ready to encrypt your Linode's disks? Here's how to prepare a Linode for full di
 
 3.  After you have created these disks, you'll want to [boot into Finnix from the Rescue tab](/docs/rescue-and-rebuild#sph_booting-into-rescue-mode). Ensure that your disks are attached as follows:
 
-    - /boot xvda
-    - swap xvdb
-    - / xvdc
+    - /boot sda
+    - swap sdb
+    - / sdc
 
 You've successfully created the disks for your Linode.
 
@@ -62,7 +62,7 @@ Now you're ready to enable full disk encryption on your Linode running Debian 7 
 2.  [Connect to LISH](/docs/using-lish-the-linode-shell), which will allow you to access the Linode's virtual console.
 3.  Enter the following command to create an encrypted volume. You'll be prompted for a passphrase. Make sure that you enter a very strong passphrase, and that you store the passphrase in a physically secure location. Or better yet, memorize the passphrase and don't store it anywhere! :
 
-        cryptsetup luksFormat /dev/xvdc
+        cryptsetup luksFormat /dev/sdc
 
 	{: .caution }
 	>
@@ -74,16 +74,16 @@ Now you're ready to enable full disk encryption on your Linode running Debian 7 
 
 4.  Open this encrypted device for access by entering the following command. Enter your passphrase when prompted.
 
-        cryptsetup luksOpen /dev/xvdc crypt-xvdc
+        cryptsetup luksOpen /dev/sdc crypt-sdc
 
 5.  Create the file systems by entering the following commands, one by one. Use `ext2` for `/boot`, and `ext4` for `/`. :
 
-        mke2fs /dev/xvda
-        mke2fs -j /dev/mapper/crypt-xvdc
+        mke2fs /dev/sda
+        mke2fs -j /dev/mapper/crypt-sdc
 
 6.  Create and activate your swap partition by entering the following commands, one by one:
 
-        cryptsetup -d /dev/urandom create crypt-swap /dev/xvdb
+        cryptsetup -d /dev/urandom create crypt-swap /dev/sdb
         mkswap /dev/mapper/crypt-swap
         swapon /dev/mapper/crypt-swap
 
@@ -94,7 +94,7 @@ Now you're ready to enable full disk encryption on your Linode running Debian 7 
 7.  Mount the encrypted volume to make it writable by entering the following commands, one by one:
 
         mkdir mnt
-        mount /dev/mapper/crypt-xvdc mnt/
+        mount /dev/mapper/crypt-sdc mnt/
 
 You have successfully enabled full disk encryption, created the file systems, and mounted the encrypted volume.
 
@@ -106,9 +106,9 @@ Now it's time to install Debian 7 (Wheezy) and mount the disks. Here's how to do
 
         debootstrap --arch=amd64  --include=openssh-server,vim,nano,cryptsetup wheezy mnt/
 
-2.  Mount `/dev/xvda` and a few other things in preparation for changing root into the newly created Debian system, then changing root into the new install. Enter the following commands, one by one:
+2.  Mount `/dev/sda` and a few other things in preparation for changing root into the newly created Debian system, then changing root into the new install. Enter the following commands, one by one:
 
-        mount /dev/xvda mnt/boot/
+        mount /dev/sda mnt/boot/
         mount -o bind /dev mnt/dev/
         mount -o bind /dev/pts/ mnt/dev/pts
         mount -t proc /proc/ mnt/proc/
@@ -123,13 +123,13 @@ Now that you're "inside" the newly installed Debian system, you'll need to make 
 
 1.  Edit `/etc/crypttab` to match the following:
 
-        crypt-xvdc      /dev/xvdc               none            luks
-        crypt-swap      /dev/xvdb               /dev/urandom    swap
+        crypt-sdc      /dev/sdc               none            luks
+        crypt-swap      /dev/sdb               /dev/urandom    swap
 
 2.  Edit `/etc/fstab` to match the following:
 
-        /dev/xvda               /boot   ext2    defaults
-        /dev/mapper/crypt-xvdc  /       ext4    noatime,errors=remount-ro
+        /dev/sda               /boot   ext2    defaults
+        /dev/mapper/crypt-sdc  /       ext4    noatime,errors=remount-ro
         /dev/mapper/crypt-swap  none    swap    sw
         proc                    /proc   proc    defaults
 
@@ -153,11 +153,11 @@ Now that you're "inside" the newly installed Debian system, you'll need to make 
 
 7.  Locate the following line in `/boot/grub/menu.lst`:
 
-        # kopt=root=/dev/mapper/crypt-xvdc ro
+        # kopt=root=/dev/mapper/crypt-sdc ro
 
 8.  Change the line in `/boot/grub/menu.lst` to match the following. This will allow update-grub to properly generate a new menu.lst when you update your kernel.
 
-        # kopt=root=/dev/mapper/crypt-xvdc console=hvc0 ro
+        # kopt=root=/dev/mapper/crypt-sdc console=hvc0 ro
 
 9.  Run `update-grub` and generate a new `initramfs` by entering the following commands, one by one:
 
