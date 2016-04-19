@@ -15,7 +15,7 @@ title: Full Disk Encryption
 Full disk encryption protects the information stored on your Linode's disks by converting it into unreadable code that can only be deciphered by authorized individuals. Nearly everything on the disk is encrypted, including the swap space and temporary files. This guide will help you implement full disk encryption on a Linode running Debian 7 (Wheezy). You'll learn how to:
 
 -   Format and encrypt your disks
--   Install a base Debian 7 (Wheezy) system with `debootstrap`
+-   Install a base Debian 8 (Jessie) system with `debootstrap`
 -   Configure services and networking
 -   Boot from the encrypted images
 
@@ -47,7 +47,7 @@ You've successfully created the disks for your Linode.
 Next, you'll need to create a configuration profile for the new Linode. Here's how to do it:
 
 1.  [Create a new configuration profile](/docs/disk-images-config-profiles#sph_creating-a-configuration-profile) in the Linode Manager.
-2.  Select the `pv-grub-x86_64` kernel from the **Kernel** menu.
+2.  Select the `Latest 64 bit (4.5.0-x86_64-linode65)` kernel from the **Kernel** menu.
 3.  In the **Block Device Assignment** section, select the disks you created in the previous section of this guide.
 4.  Disable the **Automount devtmpfs** and **Distro Helper** settings.
 5.  Save the configuration profile.
@@ -56,7 +56,7 @@ Congratulations! You're now ready to set up full disk encryption on your Linode.
 
 ## Enabling Full Disk Encryption
 
-Now you're ready to enable full disk encryption on your Linode running Debian 7 (Wheezy). Here's how to do it:
+Now you're ready to enable full disk encryption on your Linode running Debian 8 (Jessie). Here's how to do it:
 
 1.  [Reboot into Finnix](/docs/rescue-and-rebuild#sph_booting-into-rescue-mode) from the **Rescue** tab in the Linode Manager.
 2.  [Connect to LISH](/docs/using-lish-the-linode-shell), which will allow you to access the Linode's virtual console.
